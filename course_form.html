@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ heading }}{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>{{ heading }}</h1>
+  <form method="post">
+    <label>Course code
+      <input name="code" placeholder="BSCT 1215" required
+             value="{{ request.form.code or (course.code if course) or '' }}">
+    </label>
+    <label>Title
+      <input name="title" required
+             value="{{ request.form.title or (course.title if course) or '' }}">
+    </label>
+    <label>Credits
+      <input type="number" name="credits" min="1" required
+             value="{{ request.form.credits or (course.credits if course) or '' }}">
+    </label>
+    <label>Capacity (max students)
+      <input type="number" name="capacity" min="1" required
+             value="{{ request.form.capacity or (course.capacity if course) or '' }}">
+    </label>
+    <label>Lecturer
+      <select name="lecturer_id">
+        <option value="">Not assigned</option>
+        {% for l in lecturers %}
+        <option value="{{ l._id }}"
+          {% if course and course.lecturer_id == l._id %}selected{% endif %}>{{ l.name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button type="submit">Save course</button>
+  </form>
+  <p class="alt"><a href="{{ url_for('admin_courses') }}">Cancel</a></p>
+</section>
+{% endblock %}

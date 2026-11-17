@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ heading }}{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>{{ heading }}</h1>
+  <form method="post">
+    <label>Full name
+      <input name="name" required value="{{ request.form.name or (lecturer.name if lecturer) or '' }}">
+    </label>
+    <label>Email
+      <input type="email" name="email" required value="{{ request.form.email or (lecturer.email if lecturer) or '' }}">
+    </label>
+    <label>{{ 'New password (leave empty to keep the current one)' if lecturer else 'Password' }}
+      <input type="password" name="password" minlength="6" {% if not lecturer %}required{% endif %}>
+    </label>
+    <button type="submit">Save lecturer</button>
+  </form>
+  <p class="alt"><a href="{{ url_for('admin_lecturers') }}">Cancel</a></p>
+</section>
+{% endblock %}

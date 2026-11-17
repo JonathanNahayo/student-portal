@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}My profile{% endblock %}
+{% block content %}
+<section class="card profile">
+  <h1>My profile</h1>
+
+  <div class="avatar-row">
+    {% if user.photo %}
+      <img class="avatar big" alt="Profile photo"
+           src="{{ url_for('static', filename='uploads/' + user.photo) }}{% if user.updated_at %}?v={{ user.updated_at.timestamp()|int }}{% endif %}">
+    {% else %}
+      <div class="avatar big initial">{{ user.name[:1]|upper }}</div>
+    {% endif %}
+    <div>
+      <strong>{{ user.name }}</strong><br>
+      <small>{{ user.role|capitalize }}</small>
+    </div>
+  </div>
+
+  <form method="post" enctype="multipart/form-data">
+    <label>Full name
+      <input name="name" required value="{{ user.name }}">
+    </label>
+    <label>Email (cannot be changed)
+      <input value="{{ user.email }}" disabled>
+    </label>
+    {% if user.reg_number %}
+    <label>Registration number (cannot be changed)
+      <input value="{{ user.reg_number }}" disabled>
+    </label>
+    {% endif %}
+    <label>Date of birth
+      <input type="date" name="date_of_birth" value="{{ user.date_of_birth or '' }}">
+    </label>
+    <label>Gender
+      <select name="gender">
+        {% for g in ['', 'Male', 'Female', 'Other'] %}
+        <option value="{{ g }}" {% if user.gender == g %}selected{% endif %}>{{ g or 'Prefer not to say' }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Phone
+      <input name="phone" placeholder="+256 ..." value="{{ user.phone or '' }}">
+    </label>
+    <label>Country
+      <input name="country" value="{{ user.country or '' }}">
+    </label>
+    <label>Profile photo (PNG, JPG or WEBP, max 2 MB)
+      <input type="file" name="photo" accept="image/png,image/jpeg,image/webp">
+    </label>
+    {% if user.photo %}
+    <label class="check"><input type="checkbox" name="remove_photo" value="1"> Remove my current photo</label>
+    {% endif %}
+    <button type="submit">Save profile</button>
+  </form>
+  <p class="alt"><a href="{{ url_for('home') }}">Back to dashboard</a></p>
+</section>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Admin dashboard{% endblock %}
+{% block content %}
+<section class="card wide">
+  <h1>Admin dashboard</h1>
+  <p>Welcome, {{ session['name'] }}.</p>
+  <div class="stats">
+    <a class="stat" href="{{ url_for('admin_courses') }}">
+      <strong>{{ n_courses }}</strong> courses<br><small>Manage courses</small>
+    </a>
+    <a class="stat" href="{{ url_for('admin_students') }}">
+      <strong>{{ n_students }}</strong> students<br><small>View and manage students</small>
+    </a>
+    <a class="stat" href="{{ url_for('admin_lecturers') }}">
+      <strong>{{ n_lecturers }}</strong> lecturers<br><small>Manage lecturers</small>
+    </a>
+    <a class="stat {% if n_pending %}alert{% endif %}" href="{{ url_for('admin_registrations', status='pending') }}">
+      <strong>{{ n_pending }}</strong> pending<br><small>Approve registrations</small>
+    </a>
+    <a class="stat" href="{{ url_for('admin_registrations') }}">
+      <strong>{{ n_regs }}</strong> registrations<br><small>See all</small>
+    </a>
+  </div>
+</section>
+{% endblock %}

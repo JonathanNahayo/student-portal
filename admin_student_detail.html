@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ s.name }}{% endblock %}
+{% block content %}
+<section class="card wide">
+  <div class="avatar-row">
+    {% if s.photo %}<img class="avatar big" alt="Photo" src="{{ url_for('static', filename='uploads/' + s.photo) }}">
+    {% else %}<div class="avatar big initial">{{ s.name[:1]|upper }}</div>{% endif %}
+    <div>
+      <h1 style="margin:0">{{ s.name }}</h1>
+      <small>Student</small>
+    </div>
+  </div>
+  <table class="info">
+    <tr><th>Reg. number</th><td>{{ s.reg_number or '-' }}</td></tr>
+    <tr><th>Email</th><td>{{ s.email }}</td></tr>
+    <tr><th>Date of birth</th><td>{{ s.date_of_birth or '-' }}</td></tr>
+    <tr><th>Gender</th><td>{{ s.gender or '-' }}</td></tr>
+    <tr><th>Phone</th><td>{{ s.phone or '-' }}</td></tr>
+    <tr><th>Country</th><td>{{ s.country or '-' }}</td></tr>
+    <tr><th>Account created</th><td>{{ s.created_at.strftime('%d %b %Y') if s.created_at else '-' }}</td></tr>
+  </table>
+
+  <h2>Registrations</h2>
+  {% if regs %}
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Code</th><th>Title</th><th>Credits</th><th>Date</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for r in regs %}
+      <tr><td>{{ r.code }}</td><td>{{ r.title }}</td><td>{{ r.credits }}</td>
+          <td>{{ r.date.strftime('%d %b %Y') }}</td>
+          <td><span class="badge {{ r.status }}">{{ r.status|capitalize }}</span></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}<p>No registrations yet.</p>{% endif %}
+
+  <p class="actions">
+    <a class="btn" href="{{ url_for('admin_edit_student', student_id=s._id) }}">Edit student</a>
+    <a href="{{ url_for('admin_students') }}">Back to students</a>
+  </p>
+</section>
+{% endblock %}

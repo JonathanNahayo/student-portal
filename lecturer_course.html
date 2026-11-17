@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ course.code }}{% endblock %}
+{% block content %}
+<section class="card wide">
+  <h1>{{ course.code }} - {{ course.title }}</h1>
+  <p>{{ rows|length }} approved student(s). Enter a score from 0 to 100 (leave empty if not graded yet).</p>
+  {% if rows %}
+  <form method="post">
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Student</th><th>Reg. number</th><th>Score /100</th><th>Letter</th></tr></thead>
+    <tbody>
+    {% for r in rows %}
+      <tr>
+        <td class="who-cell">
+          {% if r.photo %}<img class="avatar" alt="" src="{{ url_for('static', filename='uploads/' + r.photo) }}">
+          {% else %}<span class="avatar initial">{{ r.name[:1]|upper }}</span>{% endif %}
+          {{ r.name }}
+        </td>
+        <td>{{ r.reg_number }}</td>
+        <td><input class="score" type="number" name="grade_{{ r.reg_id }}" min="0" max="100" step="0.5"
+                   value="{{ r.grade if r.grade is not none else '' }}"></td>
+        <td>{{ r.grade|letter if r.grade is not none else '-' }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <button class="save" type="submit">Save grades</button>
+  </form>
+  {% else %}
+  <p>No approved students yet. The admin must approve registrations first.</p>
+  {% endif %}
+  <p><a href="{{ url_for('lecturer_dashboard') }}">Back to my courses</a></p>
+</section>
+{% endblock %}
