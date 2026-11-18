@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Edit student{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>Edit student</h1>
+  <form method="post">
+    <label>Full name <input name="name" required value="{{ request.form.name or s.name }}"></label>
+    <label>Email <input type="email" name="email" required value="{{ request.form.email or s.email }}"></label>
+    <label>Registration number <input name="reg_number" value="{{ request.form.reg_number or s.reg_number or '' }}"></label>
+    <label>Date of birth <input type="date" name="date_of_birth" value="{{ request.form.date_of_birth or s.date_of_birth or '' }}"></label>
+    <label>Gender
+      <select name="gender">
+        {% set cur = request.form.gender if request.form else s.gender %}
+        {% for g in ['', 'Male', 'Female', 'Other'] %}
+        <option value="{{ g }}" {% if cur == g %}selected{% endif %}>{{ g or 'Prefer not to say' }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Phone <input name="phone" value="{{ request.form.phone or s.phone or '' }}"></label>
+    <label>Country <input name="country" value="{{ request.form.country or s.country or '' }}"></label>
+    <button type="submit">Save changes</button>
+  </form>
+  <p class="alt"><a href="{{ url_for('admin_student_detail', student_id=s._id) }}">Cancel</a></p>
+</section>
+{% endblock %}

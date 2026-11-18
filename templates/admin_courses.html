@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Manage courses{% endblock %}
+{% block content %}
+<section class="card wide">
+  <div class="head">
+    <h1>Courses</h1>
+    <a class="btn" href="{{ url_for('add_course') }}">Add a course</a>
+  </div>
+  {% if courses %}
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Code</th><th>Title</th><th>Credits</th><th>Capacity</th><th>Lecturer</th><th>Actions</th></tr></thead>
+    <tbody>
+    {% for c in courses %}
+      <tr>
+        <td>{{ c.code }}</td>
+        <td>{{ c.title }}</td>
+        <td>{{ c.credits }}</td>
+        <td>{{ c.capacity }}</td>
+        <td>{{ c.lecturer_name }}</td>
+        <td class="actions">
+          <a class="btn small" href="{{ url_for('edit_course', course_id=c._id) }}">Edit</a>
+          <form method="post" action="{{ url_for('delete_course', course_id=c._id) }}"
+                onsubmit="return confirm('Delete {{ c.code }}? This cannot be undone.');">
+            <button class="danger small" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <p>No courses yet. Add the first one.</p>
+  {% endif %}
+  <p><a href="{{ url_for('admin_dashboard') }}">Back to dashboard</a></p>
+</section>
+{% endblock %}

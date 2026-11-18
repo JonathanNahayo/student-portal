@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Course catalog{% endblock %}
+{% block content %}
+<section class="card wide">
+  <div class="head">
+    <h1>Course catalog</h1>
+    <a class="btn" href="{{ url_for('student_dashboard') }}">My courses</a>
+  </div>
+  {% if catalog %}
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Code</th><th>Title</th><th>Credits</th><th>Lecturer</th><th>Seats left</th><th>Action</th></tr></thead>
+    <tbody>
+    {% for c in catalog %}
+      <tr>
+        <td>{{ c.code }}</td>
+        <td>{{ c.title }}</td>
+        <td>{{ c.credits }}</td>
+        <td>{{ c.lecturer_name }}</td>
+        <td>{{ c.seats_left }} / {{ c.capacity }}</td>
+        <td>
+          {% if c.my_status %}
+            <span class="badge {{ c.my_status }}">{{ c.my_status|capitalize }}</span>
+            <form method="post" action="{{ url_for('drop_course', reg_id=c.reg_id) }}"
+                  onsubmit="return confirm('Drop {{ c.code }}?');" class="inline">
+              <input type="hidden" name="next" value="catalog">
+              <button class="danger small" type="submit">Drop</button>
+            </form>
+          {% elif c.seats_left == 0 %}
+            <span class="badge rejected">Full</span>
+          {% else %}
+            <form method="post" action="{{ url_for('register_course', course_id=c._id) }}" class="inline">
+              <button class="small" type="submit">Register</button>
+            </form>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+  <p>No courses available yet. Ask the admin to add some.</p>
+  {% endif %}
+</section>
+{% endblock %}

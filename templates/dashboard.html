@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<section class="card wide">
+  <h1>{{ title }}</h1>
+  <p>Welcome, {{ session['name'] }}. Login works. Features come in the next steps.</p>
+</section>
+{% endblock %}
